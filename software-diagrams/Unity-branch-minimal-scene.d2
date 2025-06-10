@@ -1,0 +1,451 @@
+vars: {
+  d2-config: {
+    layout-engine: elk # change = elk
+    dark-theme-id: 1
+  }
+}
+
+classes: {
+  start: {
+    shape: oval
+    style: {
+      fill: "#83a06a"
+    }
+  }
+  end: {
+    shape: oval
+    style: {
+      fill: "#a04b6e"
+    }
+  }
+}
+
+title: Unity software diagram {
+  shape: text
+  near: top-center
+  style: {
+    font-size: 80
+    italic: true {style.stroke: green}
+  }
+}
+
+stuff: "" {
+  grid-rows: 3
+
+  Notes: |md
+    # Notes
+    ## Default object properties
+    Any object with <b>default-properties</b> in their properties, contains the following properties:
+    - Rigidbody
+    - Interaction Behaviour (Script) -Left manager
+    - Interaction Behaviour (Script) -Right manager
+
+    ## Pre-packaged prefabs
+    The following prefabs, are prefabs that came from a plugin/package and have been modified for this project.
+    - <b>SteamVRObjects</b>
+      - Have been copied from the SteamVR "Assets/SteamVR/InteractionSystem/Samples/Interactions_Example.unity" scene.
+    - <b>RidderZaal_001 & RidderZaal_achter</b>
+      - Have been copy pasted from the "The Hague" Terrain provided by TNO, free of license.
+    - <b>Ultraleap Device</b>
+      - Copied from the Ultra leap "Packages/com.ultraleap.haptics.hap-e/Scenes/2. HapETest/2. HapETest.unity" scene.
+      - Modified "Interaction Manager" and deleted the non needed hand per UltraleapDevice.
+
+    ## Class Diagram
+    - CustomHapEDeviceManager, represents a modified version of the "HapEDeviceManager" class
+      - All fields and methods in the class diagram are the newly added functions for this project
+  | {style: {font-size: 44; fill: "#598abf"; font: mono}}
+
+  Unity: "minimal (Unity scene name)" {
+    grid-rows: 2
+    Player: {
+      SteamVR: "SteamVRObjects" {VRCamera}
+      Haptic-L: "UltraleapDevice Left" {
+        Properties: |md
+          - HapEDeviceManager.cs (This is the custom one, but still named the same)  
+            - Custom is true  
+          - Removed right capsule hand  
+          - Removed right interaction hand
+        |
+
+        HandTrackingOrigin.Ultraleap Interaction Manager: {
+          Properties: |md
+            - Added hand-part-finder.cs script  
+            - Attached to the Hand: Left  
+          |
+        }
+      }
+      Haptic-R: "UltraleapDevice Right" {
+        Properties: |md
+          - HapEDeviceManager.cs (This is the custom one, but still named the same)  
+            - Custom is true  
+          - Removed left capsule hand  
+          - Removed left interaction hand
+        |
+
+        HandTrackingOrigin.Ultraleap Interaction Manager: {
+          Properties: |md
+            - Added hand-part-finder.cs script  
+            - Attached to the Hand: Right  
+          |
+        }
+      }
+    }
+    Cube: "Minimal Cube" {
+      Properties: |md
+        - <b>default-properties</b>
+        - Box collider
+        - Mesh renderer : "SpatialMappingWireframe" Material
+      |
+    }
+    Sphere: "Minimal Sphere" {
+      Properties: |md
+        - <b>default-properties</b>
+        - Sphere collider
+        - Mesh renderer : "SpatialMappingWireframe" Materials
+      |
+    }
+    Building: "gebouw" {
+      RidderZaal_001: {
+        Properties: |md
+          - <b>default-properties</b>
+          - Mesh collider
+          - Mesh renderer : pre-defined Materials
+        |
+      }
+      RidderZaal_achter: {
+        Properties: |md
+          - <b>default-properties</b>
+          - Mesh collider
+          - Mesh renderer : pre-defined Materials
+        |
+      }
+    }
+
+    VRCamera(1)
+  }
+
+  classs: UML class Diagram {
+    grid-rows: 2
+    child: ChildYChecker (start-stop-button.cs) {
+      shape: class
+
+      -targetObject: "[SerializeField] GameObject"
+      -stopObject: "[SerializeField] GameObject"
+      -functionName: "[SerializeField] string"
+      -running: "[SerializeField] bool"
+
+      -OnEnable(): void
+      -OnDisable(): void
+      -CallFunctionOnTarget(obj\: GameObject): void
+    }
+
+    hand: hand_part_finder (hand-part-finder.cs) {
+      shape: class
+
+      -palm: Transform
+      -fingers: List<Transform>
+      -hand: "[SerializeField] string"
+
+      -Start(): void
+      -FindHandParts(): IEnumerator
+      -Update(): void
+    }
+
+    Finger: FingerContactHandler (contact-on-bone.cs) {
+      shape: class
+
+      +id: int
+      -hapEDeviceManager: HapEDeviceManager
+      +jsonFileName: "[SerializeField] string"
+      -handPos: Vector3
+
+      -OnTriggerEnter(other\: Collider): void
+      -Update(): void
+      -OnTriggerExit(): void
+      -Start(): void
+    }
+
+    custom: CustomHapEDeviceManager (custom_device_manager.cs) {
+      shape: class
+
+      items: "Dictionary<int, Tuple<Vector2, bool>>"
+      delay_in_seconds: "[SerializeField] float"
+      custom: "[SerializeField] bool"
+
+      -RunCoroutine(interval\: float): IEnumerator
+      +PlayXYJSON(x\: float, y\: float, json\: string): void
+      +UpdateValue(id\: int, value\: Vector2): void
+      +Enable(id\: int): void
+      +Disable(id\: int): void
+    }
+  }
+
+  flowchart: Script flowcharts {
+    grid-columns: 2
+
+    child: ChildYChecker (start-stop-button.cs) {
+      grid-rows: 1
+      onEn: "" {
+        OnEnable().class: start
+        return.class: end
+        OnEnable() -> CallFunctionOnTarget(targetObject) -> running = true -> return
+      }
+      onDis: "" {
+        if1.shape: diamond
+        if1: running is true
+        OnDisable().class: start
+        OnDisable() -> if1
+        if1 -> running = false: true {style.stroke: green}
+        running = false -> CallFunctionOnTarget(stopObject) -> return
+        if1 -> return: false {style.stroke: red}
+        return.class: end
+      }
+    }
+
+    Child2: hand_part_finder (hand-part-finder.cs) {
+      grid-columns: 1
+      Start: "" {
+        Start().class: start
+        Start() -> StartCoroutine(FindHandParts()) -> return
+        return.class: end
+      }
+      FindHandParts: "" {
+        if1.shape: diamond
+
+        loop1.shape: diamond
+        loop2.shape: diamond
+
+        # Part 1
+        FindHandParts().class: start
+        FindHandParts() -> parent = transform
+        parent = transform -> if1
+
+        if1: is parent null?
+        if1 -> "Debug.Log error & yield break": true {style.stroke: green}
+        "Debug.Log error & yield break".class: end
+        if1 -> part2: false {style.stroke: red}
+
+        # Part 2
+        part2: handContactBones = null
+
+        part2 -> loop1
+        loop1: is handContactBones found?
+        loop1 -> iterate: false {style.stroke: red}
+
+        iterate: iterate through parent's children {
+          set: "handContactBones = child & break"
+          if2.shape: diamond
+          if2: child.name is hand + " Interaction Hand Contact Bones"?
+          if2 -> set: true {style.stroke: green}
+          if2 -> continue iteration: false {style.stroke: red}
+        }
+
+        loop1 -> part3: true {style.stroke: green}
+        iterate -> yield return null -> loop1
+
+        # Part 3
+        part3: palmFound = false & fingerCount = 0
+        part3 -> loop2
+
+        loop2: palmFound is true AND fingerCount >= 9
+        loop2 -> "repalmFound & fingerCount & clear fingers": false {style.stroke: red}
+        "repalmFound & fingerCount & clear fingers" -> iterate3
+        iterate3: "iterate through handContactBones children" {
+          if3.shape: diamond
+          if4.shape: diamond
+          if5.shape: diamond
+          if6.shape: diamond
+
+          if3: does child.name contain "palm"?
+          findpalm: "palm = child & attach FingerContactHandler (if missing) & id = 69"
+          findpalm -> continue iteration
+          if3 -> findpalm: true {style.stroke: green}
+          if3 -> if4: false {style.stroke: red}
+          if4: does child.name contain "finger"?
+          if4 -> if6: true {style.stroke: green}
+          if6: "does fingers contain child?"
+          if6 -> append child to fingers: true {style.stroke: green}
+          if6 -> continue iteration: false {style.stroke: red}
+          if4 -> continue iteration: false {style.stroke: red}
+          append child to fingers -> "handler = child.GetComponent<FingerContactHandler>()"
+          "handler = child.GetComponent<FingerContactHandler>()" -> if5
+          if5: does handler exist?
+          if5 -> attach FingerContactHandler to child: false {style.stroke: red}
+          if5 -> "Debug.Log(\"It already has stuff\")": true {style.stroke: green}
+          "Debug.Log(\"It already has stuff\")" -> continue iteration
+          attach FingerContactHandler to child -> continue iteration
+        }
+
+        iterate3 -> update fingerCount -> loop2
+
+        loop2 -> iterate2: true {style.stroke: green}
+        iterate2: "iterate through fingers" {
+          assign unique id to finger
+        }
+        return.class: end
+        iterate2 -> return
+      }
+    }
+
+    contact: FingerContactHandler (contact-on-bone.cs) {
+      grid-columns: 2
+      triggerEnter: "" {
+        OnTriggerEnter().class: start
+        OnTriggerEnter() -> "hapEDeviceManager.Enable(id)"
+        "hapEDeviceManager.Enable(id)" -> return
+        return.class: end
+      }
+      Update: "" {
+        Update().class: start
+        Update() -> "Extract current pos from transform"
+        "Extract current pos from transform" -> "Make it a relative pos based on the handPos"
+        "Make it a relative pos based on the handPos" -> "hapEDeviceManager.UpdateValue(id, relPos)"
+        "hapEDeviceManager.UpdateValue(id, relPos)" -> return
+        return.class: end
+      }
+      triggerExit: "" {
+        OnTriggerExit().class: start
+        OnTriggerExit() -> "hapEDeviceManager.Disable(id)"
+        "hapEDeviceManager.Disable(id)" -> return
+        return.class: end
+      }
+      Start: "" {
+        Start().class: start
+        Start() -> if1
+        if1.shape: diamond
+        if1: "is HapEDeviceManager null?"
+        if1 -> "parentTransform = transform.parent": true {style.stroke: green}
+        if1 -> return: false {style.stroke: red}
+
+        "parentTransform = transform.parent" -> if2
+        if2.shape: diamond
+        if2: "is parentTransform not null?"
+        if2 -> "handPos = transform.parent.localPosition": true {style.stroke: green}
+        if2 -> return: false {style.stroke: red}
+
+        "handPos = transform.parent.localPosition" -> "parentTransform = parentTransform.parent"
+        "parentTransform = parentTransform.parent" -> if3
+        if3.shape: diamond
+        if3: "is parentTransform not null?"
+        if3 -> "hapEDeviceManager = the hapEDeviceManager parent from the parentTransform": true {style.stroke: green}
+        if3 -> return: false {style.stroke: red}
+
+        "hapEDeviceManager = the hapEDeviceManager parent from the parentTransform" -> return
+        return.class: end
+      }
+    }
+
+    custom: CustomHapEDeviceManager (custom_device_manager.cs) {
+      grid-rows: 2
+      coroutine: "" {
+        start: RunCoroutine(interval: float) {class: start}
+
+        set1: last_palm = false
+        loop1: always true {shape: diamond}
+
+        set2: check = false \& Copy the items dictionary into _items
+        if1: does _items containsKey(69) and does _items(69) have Item2 {shape: diamond}
+        set3: check = true
+        if2: last_palm is false {shape: diamond}
+        act1: Debug.log("Palm start") \& StopHaptics() \& PlayHapEJSON("Assets/Resources/json/palm.json")
+        set4: last_palm = true & wait for ~interval + delay_in_seconds
+        if3: last_palm is true {shape: diamond}
+        act2: wait for delay_in_seconds \& last_palm = false \& Debug.log("Palm stop") \& StopHaptics()
+        if4: check is false {shape: diamond}
+
+        start -> set1 -> loop1
+        loop1 -> set2: true {style.stroke: green}
+        set2 -> if1
+        if1 -> set3: true {style.stroke: green}
+        set3 -> if2
+        if2 -> act1: true {style.stroke: green}
+        act1 -> set4
+        if2 -> set4: false {style.stroke: red}
+        if1 -> if3: false {style.stroke: red}
+        if3 -> act2: true {style.stroke: green}
+        if3 -> if4: false {style.stroke: red}
+        act2 -> if4
+        if4 -> StopHaptics(): true {style.stroke: green}
+        set4 -> if4
+        if4 -> wait for ~interval: false {style.stroke: red}
+        StopHaptics() -> wait for ~interval
+        wait for ~interval -> loop1
+      }
+
+      play: "" {
+        start: PlayXYJSON(x: float, y: float, json: string) {class: start}
+        if1: json is null or empty
+        if2: nodes.Count > 0
+        set1: parse json \& extract nodes from json
+        set2: set x,y to 1st and 2nd node
+        set3: prase the json \& load the updated json into the hapticDevice \& Start haptic feedback
+
+        start -> if1
+        if1 -> set json to predifined value: true {style.stroke: green}
+        set json to predifined value -> set1
+        if1 -> set1: false {style.stroke: red}
+        set1 -> if2
+        if2 -> set2: true {style.stroke: green}
+        if2 -> set3: false {style.stroke: red}
+        set2 -> set3
+        set3 -> end
+
+        end: return {class: end}
+      }
+
+      Update: "" {
+        start: UpdateValue(id: int, value: Vector2) {class: start}
+        end: return {class: end}
+        if1: id is 0
+        if2: items does not Contain Key id
+
+        start -> if1
+        if1 -> end: true {style.stroke: green}
+        if1 -> if2: false {style.stroke: red}
+        if2 -> Add the new item to items: true {style.stroke: green}
+        if2 -> Update exisiting item's position with value: false {style.stroke: red}
+        Add the new item to items -> end <- Update exisiting item's position with value
+      }
+
+      Enable: "" {
+        start: Enable(id: int) {class: start}
+        if1: id is 0 {shape: diamond}
+        if2: items does not Contain Key id {shape: diamond}
+        set1: Retrieve the current Vector2 value from the item
+        set2: Replace the item with a new Tuple, setting the bool for enabbled to true
+        log1: LogWarning("Item with ID id does not exist.")
+
+        start -> if1
+        if1 -> end: true {style.stroke: green}
+        if1 -> if2: false {style.stroke: red}
+        if2 -> log1: true {style.stroke: green}
+        if2 -> set1: false {style.stroke: red}
+        set1 -> set2
+        set2 -> end
+        log1 -> end
+
+        end: return {class: end}
+      }
+
+      Disable: "" {
+        start: Disable(id: int) {class: start}
+        if1: id is 0 {shape: diamond}
+        if2: items does not Contain Key id {shape: diamond}
+        set1: Retrieve the current Vector2 value from the item
+        set2: Replace the item with a new Tuple, setting the bool for enabled to false
+        log1: LogWarning("Item with ID id does not exist.")
+
+        start -> if1
+        if1 -> end: true {style.stroke: green}
+        if1 -> if2: false {style.stroke: red}
+        if2 -> log1: true {style.stroke: green}
+        if2 -> set1: false {style.stroke: red}
+        set1 -> set2
+        set2 -> end
+        log1 -> end
+
+        end: return {class: end}
+      }
+    }
+  }
+}

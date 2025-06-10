@@ -1,0 +1,103 @@
+[
+{
+  "testerId": "5",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "vr_usability": 10,
+  "haptic_accuracy": 9,
+  "haptic_responsiveness": 9,
+  "vr_latency": 15,
+  "haptic_latency": 100,
+  "bandwidth": 300000
+},
+{
+  "testerId": "5",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 9,
+  "vr_usability": 9,
+  "haptic_accuracy": 9,
+  "haptic_responsiveness": 9,
+  "vr_latency": 30,
+  "haptic_latency": 100,
+  "bandwidth": 300000
+},{
+  "testerId": "5",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 9,
+  "vr_usability": 9,
+  "haptic_accuracy": 8,
+  "haptic_responsiveness": 8,
+  "vr_latency": 60,
+  "haptic_latency": 200,
+  "bandwidth": 300000
+},{
+  "testerId": "5",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 8,
+  "vr_usability": 8,
+  "haptic_accuracy": 8,
+  "haptic_responsiveness": 8,
+  "vr_latency": 90,
+  "haptic_latency": 200,
+  "bandwidth": 300000
+},{
+  "testerId": "5",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 8,
+  "vr_usability": 8,
+  "haptic_accuracy": 7,
+  "haptic_responsiveness": 7,
+  "vr_latency": 120,
+  "haptic_latency": 200,
+  "bandwidth": 300000
+},{
+  "testerId": "5",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 8,
+  "vr_usability": 8,
+  "haptic_accuracy": 6,
+  "haptic_responsiveness": 6,
+  "vr_latency": 150,
+  "haptic_latency": 300,
+  "bandwidth": 300000
+},{
+  "testerId": "5",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 6,
+  "vr_usability": 6,
+  "haptic_accuracy": 5,
+  "haptic_responsiveness": 6,
+  "vr_latency": 225,
+  "haptic_latency": 300,
+  "bandwidth": 300000
+},{
+  "testerId": "5",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 5,
+  "vr_usability": 5,
+  "haptic_accuracy": 4,
+  "haptic_responsiveness": 4,
+  "vr_latency": 300,
+  "haptic_latency": 400,
+  "bandwidth": 300000
+},{
+  "testerId": "5",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 4,
+  "vr_usability": 4,
+  "haptic_accuracy": 3,
+  "haptic_responsiveness": 3,
+  "vr_latency": 375,
+  "haptic_latency": 400,
+  "bandwidth": 300000
+}
+]

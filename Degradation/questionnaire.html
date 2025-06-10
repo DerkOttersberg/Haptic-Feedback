@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR Experience Survey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .question {
+            margin: 20px 0;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .slider-output {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .slider {
+            width: 100%;
+        }
+
+        #json-output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>VR Experience Survey</h2>
+    <form id="survey-form">
+        <!-- Tester ID -->
+        <div class="question">
+            <label for="tester-id">Tester ID:</label>
+            <input type="text" id="tester-id" required>
+            <p id="tester-id-error" style="color: red; display: none;">Please enter a valid Tester ID. (Should be a
+                number)</p>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question">
+            <label>How much have you used VR before?</label>
+            <div class="slider-label">
+                <span>Never</span><span>A few times (1–3)</span><span>Moderate (weekly)</span><span>Daily</span>
+            </div>
+            <input type="range" min="1" max="10" value="5" class="slider" id="vr-usage">
+            <p>Score: <span class="slider-output" id="vr-usage-output">5</span></p>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            <label><strong>Feeling (Motion sickness)</strong></label>
+            <div class="slider-label">
+                <span>Extremely nauseous</span><span>Noticeable discomfort</span><span>Slight discomfort</span><span>No
+                    discomfort</span>
+            </div>
+            <input type="range" min="1" max="10" value="5" class="slider" id="motion-sickness">
+            <p>Score: <span class="slider-output" id="motion-sickness-output">5</span></p>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            <label><strong>Can you still perform the same task you were doing?</strong></label>
+            <div class="slider-label">
+                <span>Not at all</span><span>Somewhat (50%)</span><span>Mostly (75%)</span><span>Completely
+                    (100%)</span>
+            </div>
+            <input type="range" min="1" max="10" value="5" class="slider" id="task-performance">
+            <p>Score: <span class="slider-output" id="task-performance-output">5</span></p>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            <label><strong>How usable is it?</strong></label>
+            <div class="slider-label">
+                <span>Not usable (0%)</span><span>Partially usable (40%)</span><span>Usable with ease
+                    (70%)</span><span>Extremely usable (100%)</span>
+            </div>
+            <input type="range" min="1" max="10" value="5" class="slider" id="vr_usability">
+            <p>Score: <span class="slider-output" id="vr_usability-output">5</span></p>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            <label><strong>How accurate in the 2D/3D plane does the haptic feel?</strong></label>
+            <div class="slider-label">
+                <span>Does not work (0%)</span><span>Partially accurate (40%)</span><span>Pretty accurate
+                    (70%)</span><span>Extremely accurate (100%)</span>
+            </div>
+            <input type="range" min="1" max="10" value="5" class="slider" id="haptic_accuracy">
+            <p>Score: <span class="slider-output" id="haptic_accuracy-output">5</span></p>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            <label><strong>How responsive is the haptic feedback?</strong></label>
+            <div class="slider-label">
+                <span>Does not work (0%)</span><span>Partially responsive (40%)</span><span>Pretty responsive
+                    (70%)</span><span>Extremely responsive (100%)</span>
+            </div>
+            <input type="range" min="1" max="10" value="5" class="slider" id="haptic_responsiveness">
+            <p>Score: <span class="slider-output" id="haptic_responsiveness-output">5</span></p>
+        </div>
+
+        <!-- vr_latency Slider -->
+        <div class="question">
+            <label for="vr_latency">vr_latency (0-1000 ms)</label>
+            <input type="number" id="vr_latency" min="0" max="1000" value="500">
+        </div>
+
+        <!-- haptic_latency Slider -->
+        <div class="question">
+            <label for="haptic_latency">haptic_latency (0-1000 ms)</label>
+            <input type="number" id="haptic_latency" min="0" max="1000" value="500">
+        </div>
+
+        <!-- Bandwidth Input -->
+
+        <div class="question">
+            <label for="bandwidth">Bandwidth (KB/s):</label>
+            <input type="number" id="bandwidth" value="1000">
+            <p id="bandwidth-error" style="color: red; display: none;">Please enter a valid number for Bandwidth.</p>
+        </div>
+    </form>
+
+    <!-- Submit Button -->
+    <button type="button" onclick="exportToJson()">Export to JSON</button>
+
+    <!-- JSON Output -->
+    <h3>JSON Output</h3>
+    <div id="json-output"></div>
+    <button id="copy-btn" onclick="copyJsonToClipboard()">Copy JSON to Clipboard</button>
+
+    <script>
+        // Update displayed values when sliders are moved
+        const questions = [
+            { id: "vr-usage", outputId: "vr-usage-output" },
+            { id: "motion-sickness", outputId: "motion-sickness-output" },
+            { id: "task-performance", outputId: "task-performance-output" },
+            { id: "vr_usability", outputId: "vr_usability-output" },
+            { id: "haptic_accuracy", outputId: "haptic_accuracy-output" },
+            { id: "haptic_responsiveness", outputId: "haptic_accuracy-output2" },
+            { id: "vr_latency", outputId: "vr_latency-output", suffix: " ms" },
+            { id: "haptic_latency", outputId: "haptic_latency-output", suffix: " ms" }
+        ];
+
+        questions.forEach(({ id, outputId, suffix = "" }) => {
+            const slider = document.getElementById(id);
+            const output = document.getElementById(outputId);
+            slider.oninput = () => {
+                output.textContent = slider.value + suffix;
+            };
+        });
+
+        // Load saved values from localStorage when the page loads
+        window.onload = function () {
+            // List of field IDs and their corresponding localStorage keys
+            const fields = [
+                { id: "tester-id", key: "testerId" },
+                { id: "vr-usage", key: "vrUsage" },
+                { id: "motion-sickness", key: "motionSickness" },
+                { id: "task-performance", key: "taskPerformance" },
+                { id: "vr_usability", key: "vr_usability" },
+                { id: "haptic_accuracy", key: "haptic_accuracy" },
+                { id: "haptic_responsiveness", key: "haptic_responsiveness" },
+                { id: "vr_latency", key: "vr_latency" },
+                { id: "haptic_latency", key: "haptic_latency" },
+                { id: "bandwidth", key: "bandwidth" }
+            ];
+
+            // Loop through each field and set the value from localStorage if it exists
+            fields.forEach(field => {
+                const savedValue = localStorage.getItem(field.key);
+                if (savedValue) {
+                    const element = document.getElementById(field.id);
+                    if (element) {
+                        element.value = savedValue;
+                    }
+                }
+            });
+        };
+
+        // Function to export data to JSON with error handling
+        function exportToJson(event) {
+            // Prevent form submission or page reload
+
+            // Reset error messages
+            resetErrors();
+
+            const testerId = document.getElementById("tester-id").value;
+            const vrUsage = parseInt(document.getElementById("vr-usage").value);
+            const motionSickness = parseInt(document.getElementById("motion-sickness").value);
+            const taskPerformance = parseInt(document.getElementById("task-performance").value);
+            const vr_usability = parseInt(document.getElementById("vr_usability").value);
+            const haptic_accuracy = parseInt(document.getElementById("haptic_accuracy").value);
+            const haptic_responsiveness = parseInt(document.getElementById("haptic_responsiveness").value);
+            const vr_latency = parseInt(document.getElementById("vr_latency").value);
+            const haptic_latency = parseInt(document.getElementById("haptic_latency").value);
+            const bandwidth = parseInt(document.getElementById("bandwidth").value);
+
+            // Validation checks
+            let isValid = true;
+
+            // Check for Tester ID
+            if (!testerId || isNaN(testerId)) {
+                document.getElementById("tester-id-error").style.display = "block";
+                isValid = false;
+            }
+
+            // Check for valid Bandwidth
+            if (isNaN(bandwidth) || bandwidth <= 0) {
+                document.getElementById("bandwidth-error").style.display = "block";
+                isValid = false;
+            }
+
+            // Check if all sliders have valid number inputs
+            if (isNaN(vrUsage) || isNaN(motionSickness) || isNaN(taskPerformance) ||
+                isNaN(vr_usability) || isNaN(haptic_accuracy) || isNaN(vr_latency) || isNaN(haptic_latency) || isNaN(haptic_responsiveness)) {
+                alert("Please fill in all questions with valid numbers.");
+                isValid = false;
+            }
+
+            // If all validations pass, proceed with exporting to JSON
+            if (isValid) {
+                // Get the current time and format it as a string
+                const currentTime = new Date().toISOString();
+
+                // List of fields and corresponding localStorage keys
+                const fields = [
+                    { key: "testerId", value: testerId },
+                    { key: "vrUsage", value: vrUsage },
+                    { key: "motionSickness", value: motionSickness },
+                    { key: "taskPerformance", value: taskPerformance },
+                    { key: "vr_usability", value: vr_usability },
+                    { key: "haptic_accuracy", value: haptic_accuracy },
+                    { key: "haptic_responsiveness", value: haptic_responsiveness },
+                    { key: "vr_latency", value: vr_latency },
+                    { key: "haptic_latency", value: haptic_latency },
+                    { key: "bandwidth", value: bandwidth },
+                    { key: "timestamp", value: currentTime }
+                ];
+
+                // Create data object and save each field to localStorage
+                const data = {};
+                fields.forEach(field => {
+                    localStorage.setItem(field.key, field.value); // Save to localStorage
+                    data[field.key] = field.value; // Build data object
+                });
+
+                // Display JSON data on the page
+                document.getElementById("json-output").textContent = JSON.stringify(data, null, 2);
+            }
+        }
+
+        // Function to reset error messages
+        function resetErrors() {
+            // Hide all error messages
+            document.getElementById("tester-id-error").style.display = "none";
+            document.getElementById("bandwidth-error").style.display = "none";
+        }
+
+        // Function to copy the generated JSON to the clipboard
+        function copyJsonToClipboard() {
+            const jsonOutput = document.getElementById("json-output").textContent;
+
+            // Create a temporary text area element to copy the content
+            const textarea = document.createElement("textarea");
+            textarea.value = jsonOutput;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+
+            // Optionally, display a confirmation message
+            alert("JSON copied to clipboard!");
+        }
+
+
+    </script>
+</body>
+
+</html>

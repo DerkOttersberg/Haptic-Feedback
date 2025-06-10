@@ -1,0 +1,364 @@
+vars: {
+  d2-config: {
+    layout-engine: elk # change = elk
+    dark-theme-id: 1
+  }
+}
+
+classes: {
+  start: {
+    shape: oval
+    style: {
+      fill: "#83a06a"
+    }
+  }
+  end: {
+    shape: oval
+    style: {
+      fill: "#a04b6e"
+    }
+  }
+}
+
+title: Unity software diagram {
+  shape: text
+  near: top-center
+  style: {
+    font-size: 80
+    italic: true {style.stroke: green}
+  }
+}
+stuff: "" {
+  grid-rows: 1
+  Class-diagram: UML class Diagram {
+    grid-rows: 2
+    PlayerMovement: PlayerMovement (PlayerMovement.cs) {
+      shape: class
+      +walkSpeed: float
+      +runSpeed: float
+      +jumpForce: float
+      -currentSpeed: float
+      +cameraTransform: Transform
+      -rb: Rigidbody
+      -isGrounded: bool
+      +groundMask: LayerMask
+      +groundCheckDistance: float
+      -Start()
+      -Update()
+      -MovePlayer()
+      -Jump()
+      -CheckIfGrounded()
+    }
+
+    ViewSwitch: ViewSwitch (ViewSwitch.cs) {
+      shape: class
+
+      +firstPersonPosition: Transform
+      +thirdPersonPosition: Transform
+      +mainCamera: Transform
+      +switchKey: KeyCode
+      -isFirstPerson: bool
+
+      -Start()
+      -Update()
+      -SwitchToFirstPerson()
+      -SwitchToThirdPerson()
+      -moveCamera(targetPosition\: Transform): IEnumerator
+    }
+
+    PickupThrow: PickupThrow (PickupThrow.cs) {
+      shape: class
+
+      +player: Transform
+      +playerCam: Transform
+      +leftHandGrabPoint: Transform
+      +rightHandGrabPoint: Transform
+      +throwForce: float
+      +holdDistance: float
+      +moveSpeed: float
+
+      -isCarried: bool
+      -rb: Rigidbody
+
+      -Start()
+      -Update()
+      -PickUpObject()
+      -DropObject()
+      -ThrowObject()
+      -CarryObject()
+    }
+
+    CameraControl: CameraControl (CameraControl.cs) {
+      shape: class
+
+      +mouseSensitivity: float
+      +playerBody: Transform
+      -xRotation: float
+
+      -Start()
+      -Update()
+    }
+
+    PlayerBodyColorChange: PlayerBodyColorChange (PlayerBodyColorChange.cs) {
+      shape: class
+
+      +playerRenderer: Renderer
+      +armRenderers: "Renderer[]"
+
+      -OnTriggerEnter(other\: Collider)
+    }
+  }
+  flowchart: Script flowcharts {
+    grid-rows: 1
+    playermv: PlayerMovement (PlayerMovement.cs) {
+      grid-rows: 2
+      update: {
+        start -> movePlayer
+        movePlayer -> checkJump
+        checkJump -> jump: true {style.stroke: green}
+        jump -> checkGrounded -> end
+        checkJump -> checkGrounded: false {style.stroke: red}
+
+        start: Update() {class: start}
+        movePlayer: "MovePlayer()"
+        checkJump: "Input.GetKeyDown(KeyCode.Space) AND isGrounded" {shape: diamond}
+        jump: "Jump()"
+        checkGrounded: "CheckIfGrounded()"
+        end: return {class: end}
+      }
+
+      movePlayer: {
+        start -> checkRun
+        checkRun -> setRunSpeed: true {style.stroke: green}
+        setRunSpeed -> getInput
+        checkRun -> setWalkSpeed: false {style.stroke: red}
+        setWalkSpeed -> getInput
+        getInput -> end
+
+        start: MovePlayer() {class: start}
+        checkRun: Is Right or Left Shift pressed? {shape: diamond}
+        setRunSpeed: "currentSpeed = runSpeed"
+        setWalkSpeed: "currentSpeed = walkSpeed"
+        getInput: "Based on currentSpeed and looking direction, translate the transform to the new position"
+        end: return {class: end}
+      }
+
+      start: {
+        start: Start() {class: start}
+        start -> Rigidbody
+        Rigidbody -> end
+
+        Rigidbody: set rb to the rigidbody of this script's parent
+        end: return {class: end}
+      }
+
+      jump: {
+        start -> applyJumpForce
+        applyJumpForce -> end
+
+        start: Jump() {class: start}
+        applyJumpForce: "Apply upward force on rb (rigidbody) for jumping"
+        end: return {class: end}
+      }
+      checkIfGrounded: {
+        start -> performRaycast
+        performRaycast -> end
+
+        start: CheckIfGrounded() {class: start}
+        performRaycast: "Use the groundMask, groundCheckDistance and the transform position to determine the boolean for isGrounded"
+        end: return {class: end}
+      }
+    }
+
+    viewsw: ViewSwitch (ViewSwitch.cs) {
+      grid-rows: 2
+      start: {
+        start: Start() {class: start}
+        start -> switchToThirdPerson
+        switchToThirdPerson -> end
+
+        switchToThirdPerson: SwitchToThirdPerson()
+        end: return {class: end}
+      }
+
+      switchToFirstPerson: {
+        start -> setFlag
+        setFlag -> stopCoroutines
+        stopCoroutines -> startCoroutine
+        startCoroutine -> end
+
+        start: switchToFirstPerson() {class: start}
+        setFlag: "isFirstPerson = true" {class: process}
+        stopCoroutines: "StopAllCoroutines()" {class: process}
+        startCoroutine: "StartCoroutine(MoveCamera(firstPersonPosition))" {class: process}
+        end: return {class: end}
+      }
+      switchToThirdPerson: {
+        start -> setFlag
+        setFlag -> stopCoroutines
+        stopCoroutines -> startCoroutine
+        startCoroutine -> end
+
+        start: switchToThirdPerson() {class: start}
+        setFlag: "isFirstPerson = false" {class: process}
+        stopCoroutines: "StopAllCoroutines()" {class: process}
+        startCoroutine: "StartCoroutine(MoveCamera(thirdPersonPosition))" {class: process}
+        end: return {class: end}
+      }
+
+      update: {
+        update: Update() {class: start}
+        update -> InputKey
+        InputKey -> checkFirstPerson: true {style.stroke: green}
+        InputKey -> end: false {style.stroke: red}
+        checkFirstPerson -> ThirdPerson: true {style.stroke: green}
+        checkFirstPerson -> FirstPerson: false {style.stroke: red}
+        ThirdPerson -> end
+        FirstPerson -> end
+
+        InputKey: Input.GetKeyDown(switchKey) {shape: diamond}
+        checkFirstPerson: isFirstPerson {shape: diamond}
+        ThirdPerson: SwitchToThirdPerson()
+        FirstPerson: SwitchToFirstPerson()
+        end: return {class: end}
+      }
+
+      moveCamera: {
+        start -> initialize
+        initialize -> loopCheck
+        loopCheck -> updatePosition: true {style.stroke: green}
+        updatePosition -> incrementTime
+        incrementTime -> yield -> loopCheck
+        loopCheck -> setFinalPosition: false {style.stroke: red}
+        setFinalPosition -> end
+
+        start: moveCamera(targetPosition: Transform) {class: start}
+        initialize: "Initialize Variables"
+        loopCheck: "elapsedTime < transitionTime?" {shape: diamond}
+        updatePosition: "Update Camera Position and Rotation"
+        incrementTime: "elapsedTime += Time.deltaTime"
+        yield: "wait until next frame"
+        setFinalPosition: "Set Final Position and Rotation"
+        end: return {class: end}
+      }
+    }
+
+    PickupThrow: PickupThrow (PickupThrow.cs) {
+      grid-columns: 3
+      start: "" {
+        start: Start() {class: start}
+        start -> a -> end
+        a: set rb to the rigidbody of this script's parent
+        end: return {class: end}
+      }
+
+      update: "" {
+        update: Update() {class: start}
+        update -> checkDistance
+        checkDistance -> pickUp: true {style.stroke: green}
+        checkDistance -> checkKeyE: false {style.stroke: red}
+        checkKeyE -> checkMouseUp: false {style.stroke: red}
+        checkKeyE -> drop: true {style.stroke: green}
+        checkMouseUp -> checkCarried: false {style.stroke: red}
+
+        checkMouseUp -> throw: true {style.stroke: green}
+
+        pickUp -> checkCarried
+        checkCarried -> end: false {style.stroke: red}
+        checkCarried -> carry: true {style.stroke: green}
+        throw -> checkCarried
+        drop -> checkCarried
+        carry -> end
+
+        checkDistance: "dist <= holdDistance AND Input.GetKeyDown(KeyCode.E) AND is not carried" {shape: diamond}
+        checkKeyE: isCarried is true AND Input.GetKeyDown(KeyCode.E) {shape: diamond}
+        checkMouseUp: isCarried is true AND Input.GetMouseButtonUp(0) {shape: diamond}
+        pickUp: PickUpObject()
+        checkCarried: isCarried is true {shape: diamond}
+        throw: ThrowObject()
+        carry: CarryObject()
+        drop: DropObject()
+        end: return {class: end}
+      }
+
+      PickUpObject: "" {
+        start: PickUpObject() {class: start}
+        start -> disablePhysics -> moveToMidpoint -> parentToPlayer -> end
+        disablePhysics: "Disable physics on the rb (rigidbody)\nSet isCarried to true"
+        moveToMidpoint: "Move object to midpoint between the hands"
+        parentToPlayer: "Attatch the player as parent to the transform"
+        end: return {class: end}
+      }
+
+      DropObject: "" {
+        start: DropObject() {class: start}
+        start -> initvars -> end
+        initvars: "Enable physics on the rb (rigidbody)\nisCarried = false\nDetach the parent from the transform"
+        end: return {class: end}
+      }
+
+      ThrowObject: "" {
+        start: ThrowObject() {class: start}
+        start -> enablePhysics -> applyThrowForce -> unsetCarried -> end
+        enablePhysics: "Enable physics on the rb (rigidbody)\nDetach the parent from the transform"
+        applyThrowForce: "Apply throw force in the direction of playerCam"
+        unsetCarried: "isCarried = false"
+        end: return {class: end}
+      }
+
+      CarryObject: "" {
+        start: CarryObject() {class: start}
+        start -> moveToMidpoint -> end
+        moveToMidpoint: "Move transform to midpoint between hands"
+        end: return {class: end}
+      }
+    }
+
+    CameraControl: CameraControl (CameraControl.cs) {
+      grid-columns: 1
+      start: "" {
+        start: Start() {class: start}
+        start -> a -> end
+        a: Lock the cursor position
+        end: return {class: end}
+      }
+      update: "" {
+        update: Update() {class: start}
+        update -> getMouseInput
+        getMouseInput -> rotatePlayerBody
+        rotatePlayerBody -> rotateCamera
+        rotateCamera -> clampRotation
+        clampRotation -> setLocalRotation
+        setLocalRotation -> end
+
+        getMouseInput: "Get mouse movement input for X and Y axes"
+        rotatePlayerBody: "Rotate the player body horizontally based on mouse X input"
+        rotateCamera: "Adjust the camera's vertical rotation based on mouse Y input"
+        clampRotation: "Clamp the camera's vertical rotation to prevent over-rotation"
+        setLocalRotation: "Apply the clamped rotation to the camera"
+        end: return {class: end}
+      }
+    }
+
+    PlayerBodyColorChange: PlayerBodyColorChange (PlayerBodyColorChange.cs) {
+      grid-columns: 1
+      onTriggerEnter: "" {
+        onTriggerEnter: OnTriggerEnter(other: Collider) {class: start}
+        onTriggerEnter -> checkTag
+        checkTag -> getMaterial: true {style.stroke: green}
+        checkTag -> end: false {style.stroke: red}
+        getMaterial -> applyToPlayer
+        applyToPlayer -> applyToArms
+        applyToArms -> logChange
+        logChange -> end
+
+        checkTag: "Check if the other collider has the tag 'ColorButton'" {shape: diamond}
+        getMaterial: "Get the material from the other collider's renderer"
+        applyToPlayer: "Set the player's renderer material to the button's material"
+        applyToArms: "Set each arm renderer's material to the button's material"
+        logChange: "Log the color change to the console"
+        end: return {class: end}
+      }
+    }
+  }
+}

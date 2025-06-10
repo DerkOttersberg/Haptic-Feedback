@@ -1,0 +1,278 @@
+[
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "usability": 10,
+  "latency": 0,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "usability": 10,
+  "latency": 10,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "usability": 10,
+  "latency": 30,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 9,
+  "usability": 10,
+  "latency": 40,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 9,
+  "usability": 10,
+  "latency": 50,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 9,
+  "usability": 10,
+  "latency": 60,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 9,
+  "usability": 9,
+  "latency": 70,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 9,
+  "usability": 9,
+  "latency": 80,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 7,
+  "usability": 8,
+  "latency": 100,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 6,
+  "usability": 7,
+  "latency": 120,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 6,
+  "usability": 6,
+  "latency": 140,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 6,
+  "usability": 6,
+  "latency": 160,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 5,
+  "usability": 6,
+  "latency": 170,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 5,
+  "usability": 6,
+  "latency": 180,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 5,
+  "usability": 5,
+  "latency": 200,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 2,
+  "usability": 3,
+  "latency": 250,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 2,
+  "usability": 2,
+  "latency": 300,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 2,
+  "usability": 2,
+  "latency": 340,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 2,
+  "usability": 2,
+  "latency": 340,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 1,
+  "usability": 1,
+  "latency": 400,
+  "bandwidth": 30000
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "usability": 10,
+  "latency": 0,
+  "bandwidth": 3800
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 9,
+  "usability": 9,
+  "latency": 0,
+  "bandwidth": 3700
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 7,
+  "usability": 7,
+  "latency": 0,
+  "bandwidth": 3600
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 6,
+  "usability": 7,
+  "latency": 0,
+  "bandwidth": 3500
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 6,
+  "usability": 7,
+  "latency": 0,
+  "bandwidth": 3400
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 5,
+  "usability": 5,
+  "latency": 0,
+  "bandwidth": 3300
+},
+{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 4,
+  "usability": 4,
+  "latency": 0,
+  "bandwidth": 3200
+},{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 3,
+  "usability": 3,
+  "latency": 0,
+  "bandwidth": 3000
+},{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 3,
+  "usability": 3,
+  "latency": 0,
+  "bandwidth": 3000
+},{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 1,
+  "usability": 1,
+  "latency": 0,
+  "bandwidth": 2600
+},{
+  "testerId": "4",
+  "vrUsage": 2,
+  "motionSickness": 10,
+  "taskPerformance": 1,
+  "usability": 1,
+  "latency": 0,
+  "bandwidth": 2500
+}
+
+]

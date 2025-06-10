@@ -1,0 +1,70 @@
+[
+{
+  "testerId": "6",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "vr_usability": 10,
+  "haptic_accuracy": 9,
+  "haptic_responsiveness": 10,
+  "vr_latency": 0,
+  "haptic_latency": 0,
+  "bandwidth": 300000
+},
+{
+  "testerId": "6",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "vr_usability": 10,
+  "haptic_accuracy": 8,
+  "haptic_responsiveness": 9,
+  "vr_latency": 0,
+  "haptic_latency": 200,
+  "bandwidth": 300000
+},{
+  "testerId": "6",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "vr_usability": 10,
+  "haptic_accuracy": 6,
+  "haptic_responsiveness": 7,
+  "vr_latency": 0,
+  "haptic_latency": 300,
+  "bandwidth": 300000
+},{
+  "testerId": "6",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "vr_usability": 10,
+  "haptic_accuracy": 5,
+  "haptic_responsiveness": 5,
+  "vr_latency": 0,
+  "haptic_latency": 400,
+  "bandwidth": 300000
+},{
+  "testerId": "6",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "vr_usability": 10,
+  "haptic_accuracy": 4,
+  "haptic_responsiveness": 2,
+  "vr_latency": 0,
+  "haptic_latency": 500,
+  "bandwidth": 300000
+},{
+  "testerId": "6",
+  "vrUsage": 7,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "vr_usability": 10,
+  "haptic_accuracy": 1,
+  "haptic_responsiveness": 1,
+  "vr_latency": 0,
+  "haptic_latency": 750,
+  "bandwidth": 300000
+}
+]

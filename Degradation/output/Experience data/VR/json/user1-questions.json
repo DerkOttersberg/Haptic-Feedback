@@ -1,0 +1,51 @@
+[
+{
+  "testerId": "1",
+  "vrUsage": 4,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "usability": 10,
+  "latency": -40,
+  "bandwidth": 50000
+},{
+  "testerId": "1",
+  "vrUsage": 4,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "usability": 10,
+  "latency": 0,
+  "bandwidth": 50000
+},{
+  "testerId": "1",
+  "vrUsage": 4,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "usability": 10,
+  "latency": 10,
+  "bandwidth": 50000
+},{
+  "testerId": "1",
+  "vrUsage": 4,
+  "motionSickness": 10,
+  "taskPerformance": 10,
+  "usability": 10,
+  "latency": 20,
+  "bandwidth": 50000
+},{
+  "testerId": "1",
+  "vrUsage": 4,
+  "motionSickness": 10,
+  "taskPerformance": 7,
+  "usability": 9,
+  "latency": 30,
+  "bandwidth": 50000
+},{
+  "testerId": "1",
+  "vrUsage": 4,
+  "motionSickness": 10,
+  "taskPerformance": 5,
+  "usability": 6,
+  "latency": 35,
+  "bandwidth": 50000
+}
+]
